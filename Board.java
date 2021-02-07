@@ -5,12 +5,8 @@ import java.awt.event.*;
 
 public class Board {
     private XOButton[][] ticTacToeBoard;
-    private Mark activePlayer;
-    private boolean isXTheActivePlayer;
     private TTTController controller;
     public Board(Container mainFrameContainer, int rowsAndColumns) {
-        activePlayer = Mark.X;
-        isXTheActivePlayer = true;
         ticTacToeBoard = new XOButton[rowsAndColumns][rowsAndColumns];
         generateBoard(mainFrameContainer);
         controller = new TTTController(ticTacToeBoard);
@@ -32,17 +28,6 @@ public class Board {
     }
 
     private void onActionPerformed(ActionEvent e) {
-        XOButton btn = ((XOButton)e.getSource());
-        // Container parentCont = btn.getParent();
-        if (btn.getText().equals("")) {
-            btn.setXOrO(activePlayer);
-            controller.checkIsWinningMove(btn.getRow(), btn.getColumn());
-            handlePlayerTurns();
-        }
-    }
-
-    private void handlePlayerTurns() {
-        isXTheActivePlayer = !isXTheActivePlayer;
-        activePlayer = isXTheActivePlayer ? Mark.X : Mark.O;
+        controller.processBoardEvent(e);
     }
 }

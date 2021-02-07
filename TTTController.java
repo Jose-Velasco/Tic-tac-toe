@@ -1,13 +1,19 @@
+import java.awt.event.ActionEvent;
+
 /**
  * TTTController(TicTacToeController) will handle the TTT game logic
  */
 public class TTTController {
     private final XOButton[][] ticTacToeBoard;
     private boolean hasWon;
+    private Mark activePlayer;
+    private boolean isXTheActivePlayer;
     private int currentRow;
     private int currentColumn;
     TTTController(XOButton[][] board) {
         hasWon = false;
+        activePlayer = Mark.X;
+        isXTheActivePlayer = true;
         this.ticTacToeBoard = board;
     }
 
@@ -16,6 +22,20 @@ public class TTTController {
 
     public void setCurrentColumn(int column) { currentColumn = column; }
     public int getCurrentColumn() { return currentColumn; }
+
+    private void handlePlayerTurns() {
+        isXTheActivePlayer = !isXTheActivePlayer;
+        activePlayer = isXTheActivePlayer ? Mark.X : Mark.O;
+    }
+
+    public void processBoardEvent(ActionEvent e) {
+        XOButton btn = ((XOButton)e.getSource());
+        if (btn.getText().equals("")) {
+            btn.setXOrO(activePlayer);
+            checkIsWinningMove(btn.getRow(), btn.getColumn());
+            handlePlayerTurns();
+        }
+    }
 
     public void checkIsWinningMove(int startRow, int startColumn) {
         setCurrentRow(startRow);
