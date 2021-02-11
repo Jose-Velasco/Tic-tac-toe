@@ -37,14 +37,12 @@ public class TicTacToe {
         mainFrame.setVisible(true);
     }
 
-    public void onButtonClickEvent(ActionEvent e) {
-        System.out.println(e.getSource());
-    }
+    // public void onButtonClickEvent(ActionEvent e) {
+    //     System.out.println(e.getSource());
+    // }
     public static void main(String[] args) {
         int height = 600;
         int width = 600;
         TicTacToe game = new TicTacToe(width, height);
-        System.out.println("TicTacToe.java works");
-        System.out.println(Mark.X);
     }
 }
