@@ -1,3 +1,5 @@
+@REM Java needs to be install in order to run and compile the game
+
 @REM Windows command prompt type: compile.bat TicTacToe
 @REM Power shell type: .\compile TicTacToe
 
