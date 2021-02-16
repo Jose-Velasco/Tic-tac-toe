@@ -1,7 +1,11 @@
+// Name: Jose Velasco
+// Date: Start - 1/26/2021
+// Description: handles the board view
+// File Name: Board.java
+
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.*;
-
 
 public class Board {
     private XOButton[][] ticTacToeBoard;

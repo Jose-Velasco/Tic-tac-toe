@@ -1,9 +1,9 @@
 // Name: Jose Velasco
-// Date: 1/26/2021
-// Description: Tic tac toe game object that hold the main to initialize and start the game
+// Date: Start - 1/26/2021
+// Description: Tic tac toe game object that hold the main to initialize, start the game,
+//              and to render the view container
 // File Name: TicTacToe.java
 
-// import javax.swing.JButton;
 import javax.swing.JFrame;
 import java.awt.event.*;
 import java.awt.Container;
@@ -13,7 +13,6 @@ public class TicTacToe {
     private JFrame mainFrame;
     private int height;
     private int width;
-    private Board board;
 
     public TicTacToe(int width, int height) {
         int rowsAndColumns = 3;
@@ -28,7 +27,7 @@ public class TicTacToe {
         Container container = mainFrame.getContentPane();
         container.setLayout(new GridLayout(rowsAndColumns, rowsAndColumns));
 
-        board = new Board(container, rowsAndColumns);
+        new Board(container, rowsAndColumns);
 
         mainFrame.setSize(this.width, this.height);
         mainFrame.setVisible(true);

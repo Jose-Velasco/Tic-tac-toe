@@ -1,5 +1,9 @@
-import java.awt.event.ActionEvent;
+// Name: Jose Velasco
+// Date: Start - 1/26/2021
+// Description: handles Tic tac toe game logic and handles click events
+// File Name: TTTController.java
 
+import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -52,6 +56,29 @@ public class TTTController {
         return getActivePlayer().toString().equals(ticTacToeBoard[row][column].getXOrO());
     }
 
+    /**
+     * Displays game over screen and the winning player. Prompts user if they want to play again or exit game.
+     */
+    private void onGameOver() {
+        String[] buttonText = {"Play again?", "Exit"};
+        String windowGameOverMessage = getHasWon() ? "Player " + activePlayer + " wins!" : "Draw";
+        int userChoice = JOptionPane.showOptionDialog(
+            null,
+            windowGameOverMessage,
+            "Game over!",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            buttonText,
+            null
+            );
+        if (userChoice == JOptionPane.YES_OPTION) {
+            resetGame();
+        } else {
+            System.exit(0);
+        }
+    }
+
     /** 
      * Handles player board events and checks for a winning move.
     */
@@ -66,9 +93,7 @@ public class TTTController {
             if (moveCounter > 4) {
                 checkIsWinningMove(btn.getRow(), btn.getColumn());
                 if (getHasWon() || moveCounter == ticTacToeBoard.length * ticTacToeBoard[0].length) {
-                    String windowGameOverMessage = getHasWon() ? "Player win " + activePlayer : "Draw";
-                    JOptionPane.showMessageDialog(null, windowGameOverMessage, "Game over!", JOptionPane.INFORMATION_MESSAGE);
-                    resetGame();
+                    onGameOver();
                     return;
                 }
             }
@@ -108,6 +133,7 @@ public class TTTController {
      * Handles checking if there is a win relative to the button pressed in the vertical and horizontal direction.
      * First while loop will first check if there is a win in the row the player has marked.
      * Then, it will check the column relative to the mark placed by the player for a win.
+     * 3 of the same X or O in vertical or horizontal is a win.
      */
     private void checkVerticalAndHorizontal() {
         int points = 1;
@@ -133,33 +159,39 @@ public class TTTController {
         }
     }
 
-    // To do: find a way to clean up checkDiagonal code
-    // private void onCheckDiagonal() {
-    //     int mod = 0;
-    //     if (getCurrentRow() == getCurrentColumn()) {
-    //         checkDiagonal(mod);
-    //     }
-    //     if ((getCurrentRow() != getCurrentColumn()) || (getCurrentRow() % 2 != 0)) {
-    //         mod = 3;
-    //         checkDiagonal(mod);
-    //     }
-    // }
-
     /**
-     * To Do: clean up code
      * Will use the Mark placed by a player as a pivot to check for possible diagonal wins.
      * If the placed mark is in the middle of the board then it will check both diagonals for a win.
+     * 3 of the same X or O in diagonal is a win.
      */
     private void checkDiagonal() {
         int points = 1;
         int lengthColumnsRows = ticTacToeBoard.length;
         int pivot = getCurrentRow();
-        // checks top left to bottom right diagonal of the board for win
-        if (getCurrentRow() == getCurrentColumn()) {
+        // only need to check one diagonal unless Mark placed was in middle
+        int checkCounter = 1;
+        int diagonalOffset = 0;
+        // This if checks if placed Mark is in the middle. True means that we have to
+        // check both possible diagonals for a win.
+        if (getCurrentRow() % 2 != 0) {
+            // checks top left to bottom right and top right to bottom left diagonal of the board for win
+            // thus we need to run 2 checks
+            checkCounter = 0;
+        } else if (getCurrentRow() != getCurrentColumn()) {
+            // top right to bottom left diagonal check only if True.
+            // diagonalOffset adjusts column step 
+            diagonalOffset = 2;
+        }
+        // First while loops defaults to only checking top left to bottom right diagonal of the board for win.
+        // unless Mark is in other diagonal or in the middle.
+        while (checkCounter < 2 && !getHasWon()) {
             for (int i = 0; i < lengthColumnsRows; i++) {
-                // no need to check the player placed mark since it implied
                 if (i != pivot) {
-                    if (isMarkEqualToActivePlayerMark(i, i)) {
+                    // checks top left to bottom right diagonal of the board for win unless
+                    // we do not need to check that diagonal but instead we need to check 
+                    // top right to bottom left diagonal of the board for win based on diagonalOffset value.
+                    // First argument climbs up while the second climbs down on diagonalOffset of 2
+                    if (isMarkEqualToActivePlayerMark(i, Math.abs(i - diagonalOffset))) {
                         points++;
                     } else {
                         points = 1;
@@ -168,27 +200,11 @@ public class TTTController {
                     }
                 }
             }
+            setHasWon(points == 3);
+            // if while loop is ran twice then Mark placed in the middle is implied.
+            diagonalOffset = 2;
+            checkCounter++;
         }
-        setHasWon(points == 3);
-        if (getHasWon()) {
-            return;
-        }
-        // checks top right to bottom left diagonal of the board for win
-        // Middle can win via this diagonal too thus check for win
-        if ((getCurrentRow() != getCurrentColumn()) || (getCurrentRow() % 2 != 0)) {
-            int column = 2;
-            for (int i = 0; i < lengthColumnsRows; i++) {
-                if (i != pivot) {
-                    // First argument climbs up while the second climbs down
-                    if (isMarkEqualToActivePlayerMark(i, column - i)) {
-                        points++;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-        setHasWon(points == 3);
     }
 
     private void resetGame() {
