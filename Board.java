@@ -12,6 +12,11 @@ public class Board {
         controller = new TTTController(ticTacToeBoard);
     }
 
+    /**
+     * generates game board buttons and adds them to the container.
+     * In addition, the button's font size, coordinates and actionLister will be assigned 
+     * @param mainFrameContainer content pane container of JFrame
+     */
     private void generateBoard(Container mainFrameContainer) {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {

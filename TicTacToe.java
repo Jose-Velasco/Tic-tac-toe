@@ -29,20 +29,13 @@ public class TicTacToe {
         container.setLayout(new GridLayout(rowsAndColumns, rowsAndColumns));
 
         board = new Board(container, rowsAndColumns);
-        // JButton btn = new XOButton();
-        // btn.set
-        // container.add(btn);
 
         mainFrame.setSize(this.width, this.height);
         mainFrame.setVisible(true);
     }
-
-    // public void onButtonClickEvent(ActionEvent e) {
-    //     System.out.println(e.getSource());
-    // }
     public static void main(String[] args) {
         int height = 600;
         int width = 600;
-        TicTacToe game = new TicTacToe(width, height);
+        new TicTacToe(width, height);
     }
 }
